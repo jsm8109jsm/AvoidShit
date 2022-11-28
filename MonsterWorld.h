@@ -6,6 +6,7 @@
 #include "Matrix.h"
 #include "Shit.h"
 #include <unistd.h>
+#include <vector>
 
 #define MAX_SHIT 900
 
@@ -17,12 +18,12 @@ private:
   Human human;
   Canvas canvas;
   TerminalControl tc;
-  Shit *shit[MAX_SHIT];
+  vector<Shit*> shit;
 
 public:
   MonsterWorld(int width, int height)
       : xMax(width), yMax(height), nMove(0), shitCount(0),
-        canvas(width, height), map(height, width) {
+        canvas(width, height), map(height, width), shit(MAX_SHIT){
     for (int y = 0; y < yMax - 6; y++) {
       for (int x = 0; x < xMax; x++) {
         // map[y][x] = 1;
@@ -32,7 +33,7 @@ public:
         }
       }
     }
-  };
+  }
   // ~MonsterWorld() { delete human; };
   void print() {
     system("clear");
@@ -56,19 +57,35 @@ public:
     cout << " 엔터를 누르세요...";
     getchar();
     tc.playModeSetting();
+
+    // for (int y = 0; y < yMax; y++) {
+    //   for (int x = 0; x < xMax; x++) {
+    //     cout << map[y][x] << " ";
+    //   }
+    //   cout << endl;
+    // }
+
+    // shit[0]->move(map.getMatrix(), yMax);
+
+    // for (int y = 0; y < yMax; y++) {
+    //   for (int x = 0; x < xMax; x++) {
+    //     cout << map[y][x] << " ";
+    //   }
+    //   cout << endl;
+    // }
     // while(1) {
     for (int i = 0; i < maxWalk; i++) {
-      for (int j = 0; j < shitCount - 1; j++) {
-        shit[j]->move(map.getMatrix());
+      for (int j = shitCount - 1; j >= 0; j--) {
+        shit[j]->move(map.getMatrix(), yMax, shit, j);
       }
       human.move(map.getMatrix(), xMax, yMax);
       nMove += 0.5;
       print();
       usleep(wait);
     }
-    for (int j = 0; j < shitCount - 1; j++) {
-      shit[j]->print();
-    }
+    // for (int j = 0; j < shitCount - 1; j++) {
+    //   shit[j]->print();
+    // }
 
     tc.defaultSetting();
   }

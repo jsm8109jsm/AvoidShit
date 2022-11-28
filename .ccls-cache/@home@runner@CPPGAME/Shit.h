@@ -2,6 +2,7 @@
 #define __SHIT_H__
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -11,11 +12,15 @@ private:
 
 public:
   Shit(int x, int y) : x(x), y(y){};
-  // void move() { x++; }
-  void move(int **map) {
-    if (map[y][x] == 1) {
-      map[y][x] = 0;
-      map[y][x++] = 1;
+  void move(int **map, int yMax, vector<Shit *> s, int index) {
+    // if (map[x][y] == 1) {
+    map[x][y] = 0;
+    x++;
+    map[x][y] = 1;
+    s[index] = new Shit(x, y);
+    // }
+    if (x == yMax - 1) {
+      return;
     }
   }
   void print() { cout << x << " " << y << endl; }
