@@ -1,5 +1,5 @@
-#ifndef __MONSTER_WORLD_H__
-#define __MONSTER_WORLD_H__
+#ifndef __AVOID_SHIT_H__
+#define __AVOID_SHIT_H__
 
 #include "Human.h"
 #include "Input.h"
@@ -10,7 +10,7 @@
 
 #define MAX_SHIT 900
 
-class MonsterWorld {
+class AvoidShit {
 private:
   Matrix<int> map;
   int xMax, yMax, shitCount;
@@ -18,12 +18,12 @@ private:
   Human human;
   Canvas canvas;
   TerminalControl tc;
-  vector<Shit*> shit;
+  vector<Shit *> shit;
 
 public:
-  MonsterWorld(int width, int height)
+  AvoidShit(int width, int height)
       : xMax(width), yMax(height), nMove(0), shitCount(0),
-        canvas(width, height), map(height, width), shit(MAX_SHIT){
+        canvas(width, height), map(height, width), shit(MAX_SHIT) {
     for (int y = 0; y < yMax - 6; y++) {
       for (int x = 0; x < xMax; x++) {
         // map[y][x] = 1;
@@ -34,7 +34,7 @@ public:
       }
     }
   }
-  // ~MonsterWorld() { delete human; };
+  ~AvoidShit() { cout << "버틴 시간: " << nMove << "초" << endl; };
   void print() {
     system("clear");
     canvas.clear();
@@ -57,35 +57,26 @@ public:
     cout << " 엔터를 누르세요...";
     getchar();
     tc.playModeSetting();
-
-    // for (int y = 0; y < yMax; y++) {
-    //   for (int x = 0; x < xMax; x++) {
-    //     cout << map[y][x] << " ";
-    //   }
-    //   cout << endl;
-    // }
-
-    // shit[0]->move(map.getMatrix(), yMax);
-
-    // for (int y = 0; y < yMax; y++) {
-    //   for (int x = 0; x < xMax; x++) {
-    //     cout << map[y][x] << " ";
-    //   }
-    //   cout << endl;
-    // }
-    // while(1) {
-    for (int i = 0; i < maxWalk; i++) {
+    while (1) {
+      for (int x = 0; x < xMax; x++) {
+        // map[y][x] = 1;
+        if (rand() % 5 < 1) {
+          shit[shitCount++] = new Shit(0, x);
+          map.elem(0, x) = 1;
+        }
+      }
       for (int j = shitCount - 1; j >= 0; j--) {
-        shit[j]->move(map.getMatrix(), yMax, shit, j);
+        shit[j]->drop(map.getMatrix(), yMax, shit, j);
       }
       human.move(map.getMatrix(), xMax, yMax);
       nMove += 0.5;
       print();
+      for (int j = shitCount - 1; j >= 0; j--) {
+        if (shit[j]->hit(human))
+          return;
+      }
       usleep(wait);
     }
-    // for (int j = 0; j < shitCount - 1; j++) {
-    //   shit[j]->print();
-    // }
 
     tc.defaultSetting();
   }

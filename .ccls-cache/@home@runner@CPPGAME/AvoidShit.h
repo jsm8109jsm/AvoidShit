@@ -1,5 +1,5 @@
-#ifndef __MONSTER_WORLD_H__
-#define __MONSTER_WORLD_H__
+#ifndef __AVOID_SHIT_H__
+#define __AVOID_SHIT_H__
 
 #include "Human.h"
 #include "Input.h"
@@ -10,7 +10,7 @@
 
 #define MAX_SHIT 900
 
-class MonsterWorld {
+class AvoidShit {
 private:
   Matrix<int> map;
   int xMax, yMax, shitCount;
@@ -21,7 +21,7 @@ private:
   vector<Shit *> shit;
 
 public:
-  MonsterWorld(int width, int height)
+  AvoidShit(int width, int height)
       : xMax(width), yMax(height), nMove(0), shitCount(0),
         canvas(width, height), map(height, width), shit(MAX_SHIT) {
     for (int y = 0; y < yMax - 6; y++) {
@@ -34,7 +34,7 @@ public:
       }
     }
   }
-  ~MonsterWorld() { cout << "버틴 시간: " << nMove << "초" << endl; };
+  ~AvoidShit() { cout << "버틴 시간: " << nMove << "초" << endl; };
   void print() {
     system("clear");
     canvas.clear();

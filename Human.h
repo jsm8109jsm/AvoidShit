@@ -23,9 +23,10 @@ public:
       y = yMax - 1;
   }
   Human(int x = 15, int y = 29, char icon = '^') : x(x), y(y), icon(icon) {}
-  virtual ~Human() { cout << "다음에 또 만나~~\n"; }
   void draw(Canvas &canvas) { canvas.draw(x, y, icon); }
   void print() { cout << x << y << endl; }
+  int getX() { return x; }
+  int getY() { return y; }
   virtual void move(int **map, int xMax, int yMax) {
     int a = getch();
     if (a == 27) {
