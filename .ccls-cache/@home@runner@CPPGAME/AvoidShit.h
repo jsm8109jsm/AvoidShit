@@ -8,12 +8,12 @@
 #include <unistd.h>
 #include <vector>
 
-#define MAX_SHIT 900
+#define MAX_SHIT 99999
 
 class AvoidShit {
 private:
   Matrix<int> map;
-  int xMax, yMax, shitCount;
+  int xMax, yMax, shitCount, probability;
   float nMove;
   Human human;
   Canvas canvas;
@@ -22,12 +22,12 @@ private:
 
 public:
   AvoidShit(int width, int height)
-      : xMax(width), yMax(height), nMove(0), shitCount(0),
+      : xMax(width), yMax(height), nMove(0), shitCount(0), probability(2),
         canvas(width, height), map(height, width), shit(MAX_SHIT) {
     for (int y = 0; y < yMax - 6; y++) {
       for (int x = 0; x < xMax; x++) {
         // map[y][x] = 1;
-        if (rand() % 5 < 1) {
+        if (rand() % 10 < probability) {
           shit[shitCount++] = new Shit(y, x);
           map.elem(y, x) = 1;
         }
@@ -70,6 +70,12 @@ public:
       }
       human.move(map.getMatrix(), xMax, yMax);
       nMove += 0.5;
+      if (nMove == 50) {
+        probability++;
+      }
+      else if (nMove == 100) {
+        probability++;
+      }
       print();
       for (int j = shitCount - 1; j >= 0; j--) {
         if (shit[j]->hit(human))
